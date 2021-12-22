@@ -16,21 +16,21 @@ def makecomplexnp(filename):
 
 
 df,samplfreq, centrfreq = makecomplexnp(r'/Users/selin/Downloads/df1.csv')
-n=1024
+n=2048
 df=df[:n]
 
-ff=np.fft.fft(df)
-x = np.fft.fftfreq(n, d=1/samplfreq)
+# ff=np.fft.fft(df)
+# x = np.fft.fftfreq(n, d=1/samplfreq)
+# plt.plot(x, ff, 'palevioletred')
+# plt.xlabel(f'Frequency resolution over {n} points = {samplfreq/n} [Hz]', fontsize='small')
+# plt.ylabel('Amplitude Density, [V/Hz^(1/2)]')
+
+
+
+ff = abs(np.fft.fftshift(np.fft.fft(df)))**2
+x = np.fft.fftshift(np.fft.fftfreq(n, d=1/samplfreq)) + centrfreq
 plt.plot(x, ff, 'palevioletred')
 plt.xlabel(f'Frequency resolution over {n} points = {samplfreq/n} [Hz]', fontsize='small')
-plt.ylabel('Amplitude Density, [V/Hz^(1/2)]')
-
-
-
-# ff = abs(np.fft.fftshift(ff))**2
-# x = np.fft.fftshift(x) + centrfreq
-#plt.plot(x, ff, 'palevioletred')
-# plt.xlabel(f'Frequency resolution over {n} points = {samprate/n} [Hz]', fontsize='small')
-#plt.ylabel('Power Density, [V^2/Hz]')
+plt.ylabel('Power Density, [V^2/Hz]')
 
 area = np.trapz(ff,x)
