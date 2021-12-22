@@ -21,9 +21,16 @@ df=df[:n]
 
 ff=np.fft.fft(df)
 x = np.fft.fftfreq(n, d=1/samplfreq)
+plt.plot(x, ff, 'palevioletred')
+plt.xlabel(f'Frequency resolution over {n} points = {samplfreq/n} [Hz]', fontsize='small')
+plt.ylabel('Amplitude Density, [V/Hz^(1/2)]')
 
-ff = abs(np.fft.fftshift(ff))**2
-x = np.fft.fftshift(x) + centrfreq
 
-plt.plot(x, ff)
+
+# ff = abs(np.fft.fftshift(ff))**2
+# x = np.fft.fftshift(x) + centrfreq
+#plt.plot(x, ff, 'palevioletred')
+# plt.xlabel(f'Frequency resolution over {n} points = {samprate/n} [Hz]', fontsize='small')
+#plt.ylabel('Power Density, [V^2/Hz]')
+
 area = np.trapz(ff,x)
