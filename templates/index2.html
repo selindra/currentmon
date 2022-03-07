@@ -1,0 +1,45 @@
+<html>
+<meta http-equiv="refresh" content="1" />
+<!-- <script src="currentmon.js" defer></script>  -->
+<link rel="stylesheet" href="{{ url_for('static', filename='currentmon2.css') }}"> 
+
+  <body>
+
+      <header>
+    <img src="https://i.ibb.co/9wjhcTC/logocm.png" alt="logo" class="center">
+      </header> 
+      <main>
+        <section>
+          <form action="/dcct" method="post">
+              <label for="dcct1"> Enter the DCCT [mA] value:</label>
+              <input type="text" name="dcct1" >
+              <button type="submit" name="dcct" value="dcct1"> Apply </button>
+          </form> 
+        
+          <figure>
+            <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
+            <figcaption> Changing of current graph </figcaption>
+          </figure>
+       </section>   
+          <aside>
+
+              <form action="" method="post">
+                <label for="dcct2"> Enter the DCCT [mA] value:</label>
+                <input type="text" name="dcct2" >
+                <button type="submit" name="dcct" value="dcct2"> Apply </button>
+              </form> 
+
+              <figure>
+                <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
+                <figcaption> Changing of current graph </figcaption>
+              </figure>
+
+          </aside>
+      </main>
+
+    <footer>
+      <p><a href="https://github.com/selindra" target="_blank"></a></p>
+    </footer> 
+
+  </body>
+</html>

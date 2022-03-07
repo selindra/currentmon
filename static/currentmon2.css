@@ -1,0 +1,72 @@
+html {
+  font-size: 15px;
+  font-family: Optima, sans-serifsans-serif;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 10%;
+}
+main {
+  display: flex;
+}
+
+section {
+  flex:-1;
+}
+
+aside {
+  width: 70%;
+  padding-left: 85px;
+  margin-left: 15px;
+  float: right;
+  background-color: LavenderBlush;
+}
+
+footer {
+  margin-top: 10px;
+  text-align: center;
+  opacity: 0.3;
+}
+a[href*="https://github.com/selindra"] {
+  background: url('https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg') no-repeat;
+  background-size: 17px;
+  padding-right: 60px;
+}
+form div {
+  display: table-row;
+}
+figcaption {
+  text-align: center;
+}
+
+button {
+	box-shadow:inset 27px 0px 0px -36px #fff0fb;
+	background:linear-gradient(to bottom, #e8ccd5 5%, #fff0f5 100%);
+	background-color:#e8ccd5;
+	border-radius:9px;
+	border:1px solid #ababab;
+	display:inline-block;
+cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='20' height='25' viewport='0 0 100 100' style='fill:black;font-size:15px;'><text y='50%'>🐽</text></svg>") 16 0,auto;
+  font-family: Optima, sans-serifsans-serif;
+	font-size:17px;
+	padding: 3px 15px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+button:hover {
+	background:linear-gradient(to bottom, #fff0f5 5%, #e8ccd5 100%);
+	background-color:#fff0f5;
+}
+button:active {
+	position:relative;
+	top:1px;
+}
+input {
+  	padding: 2px 13px;
+    font-family: Optima, sans-serifsans-serif;
+	  font-size:17px;
+	  border-radius:5px;
+	  border:1px solid #ababab;
+}
