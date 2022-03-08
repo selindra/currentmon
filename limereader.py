@@ -29,10 +29,10 @@ class LimeReader:
       self.sdr.setGain(SOAPY_SDR_RX, RX1, "PGA", 0) # programmable-gain amplifier (PGA)
       self.sdr.setGain(SOAPY_SDR_RX, RX2, "PGA", 0)       
       
-      # self.sdr.setGain(SOAPY_SDR_RX, RX1, 0)
-      # self.sdr.setGain(SOAPY_SDR_RX, RX2, 0) 
-      # self.sdr.setDCOffsetMode(SOAPY_SDR_RX, 0, False)  
-      # self.sdr.setDCOffsetMode(SOAPY_SDR_RX, 1, False)
+      self.sdr.setGain(SOAPY_SDR_RX, RX1, 0)
+      self.sdr.setGain(SOAPY_SDR_RX, RX2, 0) 
+      self.sdr.setDCOffsetMode(SOAPY_SDR_RX, 0, False)  
+      self.sdr.setDCOffsetMode(SOAPY_SDR_RX, 1, False)
       
       self.sdr.setFrequency(SOAPY_SDR_RX, RX1, self.freq)         # Tune the LO
       self.sdr.setFrequency(SOAPY_SDR_RX, RX2, self.freq)         # Tune the LO
