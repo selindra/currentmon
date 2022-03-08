@@ -69,7 +69,7 @@ def getzmqdf():
 def saveplot(ff, xx):
         path = ''
         plt.plot(xx, ff, 'palevioletred')
-      #  plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
+     #  plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
         plt.xlabel('Frequency [Hz]', fontsize='small')
         plt.ylabel('Power Density, [V^2/Hz]')        
         plt.savefig(path + 'plot{}.png'.format(str(time.strftime("%d.%m-%H:%M:%S"))))
