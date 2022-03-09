@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import argparse
 from scipy import stats
 
-
 class SpectrumSimulator:
     
     def __init__(self, center, fwhm, span, n):
@@ -20,26 +19,18 @@ class SpectrumSimulator:
         self.sigma = fwhm / 2*np.sqrt(2*np.log(2))
         self.span = span
         self.n = n
-        
     
-    def get_spectrum(self):
-        
-            x_values = np.linspace(self.center-self.span, self.center+self.span, int(self.n))
-            y_values = stats.norm(self.center, self.sigma)
-            noise = np.random.randint(self.center, size = self.n)
+    def get_spectrum(self):     
+        x_values = np.linspace(self.center-self.span, self.center+self.span, int(self.n))
+        y_values = stats.norm(self.center, self.sigma)
+        noise = np.random.randint(self.center, size = self.n)
+        return x_values, y_values.pdf(x_values)*noise
 
-            return x_values, y_values.pdf(x_values)*noise
-
-
-        
     def splotting(self, x_values, y_values, filename):
-            plt.plot(x_values, y_values)
-            plt.xlabel('Frequency, Hz')
-            plt.ylabel('Power Density, [a. u.]')
-            plt.savefig(f'{filename}.png')
-        
-    
-        
+        plt.plot(x_values, y_values)
+        plt.xlabel('Frequency, Hz')
+        plt.ylabel('Power Density, [a. u.]')
+        plt.savefig(f'{filename}.png')
         
 if __name__ == "__main__":
     
@@ -51,12 +42,8 @@ if __name__ == "__main__":
     parser.add_argument("--n", type=int, nargs='?', help="Set the number of points")
     args = parser.parse_args()
     
-    # now we have args, we create the object
-    
     spectrum_sim = SpectrumSimulator(args.center, args.fwhm, args.span, args.n)
-    
     xx, yy = spectrum_sim.get_spectrum()
-    
     spectrum_sim.splotting(xx, yy, args.filename)
     
     

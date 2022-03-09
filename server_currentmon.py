@@ -17,11 +17,11 @@ def con(host, port, center, span):
     socket = context.socket(zmq.PUB)
     socket.bind('tcp://'+host+':'+port)
     socket.setsockopt(zmq.CONFLATE, 1)
-    mylime = LimeReader(args.center, 1, args.span*2, args.span, [1, 2]) #span*2==fs???? and bw how related to span
+    mylime = LimeReader(cent_freq = args.center, meas_time = 1, fs = args.span*2, rx_bw = args.span*2, channel = [1, 2]) #span*2==fs???? and bw how related to span
    
     try:
         while True:
-                
+            
             mylime.getsignal()
             df, fd = mylime.convertsig()
             dffd = np.append(df, fd)
