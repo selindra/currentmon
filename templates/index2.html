@@ -1,34 +1,31 @@
 <html>
-<meta http-equiv="refresh" content="1" />
-<!-- <script src="currentmon.js" defer></script>  -->
 <link rel="stylesheet" href="{{ url_for('static', filename='currentmon2.css') }}"> 
 
   <body>
 
       <header>
     <img src="https://i.ibb.co/9wjhcTC/logocm.png" alt="logo" class="center">
-      </header> 
-      <main>
-        <section>
-          <form action="/dcct" method="post">
+      </header>
+      <form  class="center">
+        <label > How often the page needs to be refresh in s:</label>
+        <input type="text" id="refreshtime" name="refreshtime" style="width: 135px;"/>
+      </form>    
+          <form action="/dcct" method="post"  class="center">
               <label for="dcct1"> Enter the DCCT [mA] value:</label>
               <input type="text" name="dcct1" >
               <button type="submit" name="dcct" value="dcct1"> Apply </button>
           </form> 
-        
+      <main>
+
+        <section>
+          <p> Channel RX1L </p>
           <figure>
             <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
             <figcaption> Changing of current graph </figcaption>
           </figure>
        </section>   
           <aside>
-
-              <form action="" method="post">
-                <label for="dcct2"> Enter the DCCT [mA] value:</label>
-                <input type="text" name="dcct2" >
-                <button type="submit" name="dcct" value="dcct2"> Apply </button>
-              </form> 
-
+              <p> Channel RX2L </p>
               <figure>
                 <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
                 <figcaption> Changing of current graph </figcaption>
@@ -40,6 +37,23 @@
     <footer>
       <p><a href="https://github.com/selindra" target="_blank"></a></p>
     </footer> 
-
+  <script  type="text/javascript">
+let refreshtime = document.getElementById("refreshtime");
+if (sessionStorage.getItem("autosave")) {
+  refreshtime.value = sessionStorage.getItem("autosave");
+  setTimeout(function () {
+    location.reload(1);
+  }, refreshtime.value * 1000);
+} else {
+  setTimeout(function () {
+    location.reload(1);
+  }, 5000);
+}
+if(refreshtime){
+  refreshtime.addEventListener("change", function () {
+    sessionStorage.setItem("autosave", refreshtime.value);
+  });
+}
+</script>
   </body>
 </html>

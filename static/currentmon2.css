@@ -12,6 +12,12 @@ main {
   display: flex;
 }
 
+form.center {
+  display: table-row;
+  display: block;
+  width: 50%;
+
+}
 section {
   flex:-1;
 }
@@ -34,9 +40,7 @@ a[href*="https://github.com/selindra"] {
   background-size: 17px;
   padding-right: 60px;
 }
-form div {
-  display: table-row;
-}
+
 figcaption {
   text-align: center;
 }
@@ -70,3 +74,7 @@ input {
 	  border-radius:5px;
 	  border:1px solid #ababab;
 }
+p {
+  text-align: center;
+}
+

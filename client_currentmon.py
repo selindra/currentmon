@@ -27,27 +27,31 @@ def plot_dcct():
     df,fd = getzmqdf()
     fs = int(np.real(df[0]))
     center = int(np.imag(df[0]))
-    df=df[1:]
+    dates = int(np.real(df[1]))             
+    df=df[2:]
     ff = abs(np.fft.fftshift(np.fft.fft(df)))**2
     xx = np.fft.fftshift(np.fft.fftfreq(fs, d=1/fs)) + center
     fig = Figure()
     ax = fig.subplots()
-    ax.plot(xx, ff, 'palevioletred')
-    ax.set_title(str(time.strftime("%H:%M:%S"))+' dcct='+str(dcct1))
+    ax.plot(xx , 10*np.log10(ff), 'palevioletred')
+  #  ax.set_title(str(time.strftime("%H:%M:%S"))+' dcct='+str(dcct1))
+    ax.set_title('Recorded on ' + str(time.ctime(dates))+' dcct='+str(dcct1))
+    ax.set_xlabel('Frequency in [Hz]')
+    ax.set_ylabel('Power in [dB]')
     buf = BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0) 
     figpng = base64.b64encode(buf.getvalue())
         
-    fs2 = int(np.real(fd[0]))
-    center2 = int(np.imag(fd[0]))
-    fd=fd[1:]
+    dates2 = int(np.real(fd[1])) 
+    fd=fd[2:]
     ff2 = abs(np.fft.fftshift(np.fft.fft(fd)))**2
-    xx2 = np.fft.fftshift(np.fft.fftfreq(fs2, d=1/fs2)) + center2
     fig2 = Figure()
     ax2 = fig2.subplots()
-    ax2.plot(xx2, ff2, 'palevioletred')
-    ax2.set_title(str(time.strftime("%H:%M:%S"))+' dcct='+str(dcct1))
+    ax2.plot(xx, 10*np.log10(ff2), 'palevioletred')
+    ax2.set_title('Recorded on ' + str(time.ctime(dates2))+' dcct='+str(dcct1))
+    ax2.set_ylabel('Power in [dB]')
+    ax2.set_xlabel('Frequency in [Hz]')
     buf2 = BytesIO()
     fig2.savefig(buf2, format="png")
     buf2.seek(0) 
