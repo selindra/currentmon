@@ -11,25 +11,47 @@ import argparse
 import matplotlib.pyplot as plt
 import zmq
 import time
-from flask import Flask, render_template, request
+import datetime
+from flask import Flask, render_template, request, redirect, url_for
 import base64
 from io import BytesIO
 from matplotlib.figure import Figure
 
+
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    plot1, plot2, area1, area2 = plot_dcct()
-    return render_template('index2.html', plot2=plot2, plot1=plot1)
+    # if request.method == 'POST':
+    #     global dcct
+    #     dcct = int(request.form['dcct'])
+    #     plot1, plot2, area1, area2 = plot_dcct()
+    #     global a1 
+    #     a1 = dcct/area1
+    #     global a2
+    #     a2 = dcct/area2
+    #    # current1 = a1 * area1 
+    # #    current2 = a2 * area2
+    #     return render_template('index2.html', plot2=plot2, plot1=plot1, )
+    # else:
+        plot1, plot2, area1, area2 = plot_dcct()
+        current1 = a1 * area1 
+        current2 = a2 * area2
+        return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
 
 @app.route('/dcct', methods=['POST'])
 def dcct():
-    global dcct
-    dcct = int(request.form['dcct'])
-    plot1, plot2, area1, area2 = plot_dcct()
-    
-    return render_template('index2.html', plot2=plot2, plot1=plot1, area1=area1, area2=area2)
+        global dcct
+        dcct = float(request.form['dcct'])
+        plot1, plot2, area1, area2 = plot_dcct()
+        global a1 
+        a1 = dcct/area1
+        global a2
+        a2 = dcct/area2
+        current1 = a1 * area1 
+        current2 = a2 * area2
+        # return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
+        return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))
     
 
 def plot_dcct():
@@ -43,8 +65,7 @@ def plot_dcct():
     fig = Figure()
     ax = fig.subplots()
     ax.plot(xx , 10*np.log10(ff), 'palevioletred')
-  #  ax.set_title(str(time.strftime("%H:%M:%S"))+' dcct='+str(dcct1))
-    ax.set_title('Recorded on ' + str(time.ctime(dates))+' dcct='+str(dcct))
+    ax.set_title(str(datetime.datetime.strptime(time.ctime(dates), "%a %b %d %H:%M:%S %Y"))+', DCCTnorm='+str(dcct))
     ax.set_xlabel('Frequency in [Hz]')
     ax.set_ylabel('Power in [dB]')
     buf = BytesIO()
@@ -59,7 +80,7 @@ def plot_dcct():
     fig2 = Figure()
     ax2 = fig2.subplots()
     ax2.plot(xx, 10*np.log10(ff2), 'palevioletred')
-    ax2.set_title('Recorded on ' + str(time.ctime(dates2))+' dcct='+str(dcct))
+    ax2.set_title(str(datetime.datetime.strptime(time.ctime(dates2), "%a %b %d %H:%M:%S %Y"))+', DCCTnorm='+str(dcct))
     ax2.set_ylabel('Power in [dB]')
     ax2.set_xlabel('Frequency in [Hz]')
     buf2 = BytesIO()
@@ -81,17 +102,17 @@ def getzmqdf():
     fd = dffd[int(len(dffd)/2):int(len(dffd)+1)]
     return df, fd
 
-def saveplot(ff, xx):
+def saveplot(ff, xx, dates):
     path = ''
     plt.plot(xx, ff, 'palevioletred')
-     #  plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
-    plt.xlabel('Frequency [Hz]', fontsize='small')
-    plt.ylabel('Power Density, [V^2/Hz]')        
-    plt.savefig(path + 'plot{}.png'.format(str(time.strftime("%d.%m-%H:%M:%S"))))
+   #plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
+    plt.xlabel('Frequency in [Hz]', fontsize='small')
+    plt.ylabel('Power in [dB]')        
+    plt.savefig(path + 'plot{}.png'.format(str(time.ctime(dates))+' DCCTmax='+str(dcct)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dcct", type=float, nargs='?', help="Give the DCCT current value")
+    #parser.add_argument("--dcct", type=float, nargs='?', help="Give the DCCT current value")
     parser.add_argument("--host", type=str, nargs='?', help="Set publisher host")
     parser.add_argument("--port", type=str, nargs='?', help="Set publisher port")
     parser.add_argument("--hostCM", type=str, nargs='?', help="Set publisher host")
@@ -99,7 +120,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     port = args.port
     host = args.host
-    dcct = args.dcct
+    #dcct = args.dcct
+    a1, a2, dcct = 50, 50, 0.01
     app.run(debug=True, port=args.portCM, host=args.hostCM)
   
   

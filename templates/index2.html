@@ -6,12 +6,12 @@
       <header>
     <img src="https://i.ibb.co/9wjhcTC/logocm.png" alt="logo" class="center">
       </header>
-      <form  class="center">
-        <label > How often the page needs to be refresh in s:</label>
+      <form   class="center">
+        <label > Page refresh rate [s]:</label>
         <input type="text" id="refreshtime" name="refreshtime" style="width: 135px;"/>
       </form>    
-          <form action="{{ url_for('dcct') }}" method="POST"  class="center">
-              <label for="dcct"> Enter the DCCT [mA] value:</label>
+          <form method="POST" action="{{ url_for('dcct') }}"  class="center">
+              <label for="dcct"> DCCT max value for normlization [mA]:</label>
               <input type="text" name="dcct" >
               <button type="submit" name="dcct" value="dcct"> Apply </button>
           </form> 
@@ -20,7 +20,7 @@
      
         <section>
           <p> Channel RX1L </p>
-          <p> The area under the curve is {{ area1 }}</p>
+          <p> Corresponding Schottky current [mA]: {{ current1 }}</p>
           <figure>
             <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
             <figcaption> Changing of current graph </figcaption>
@@ -28,7 +28,7 @@
        </section>   
           <aside>
               <p> Channel RX2L </p>
-              <p> The area under the curve is {{ area2 }}</p>
+              <p> Corresponding Schottky current [mA]: {{ current2 }}</p>
               <figure>
                 <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
                 <figcaption> Changing of current graph </figcaption>
