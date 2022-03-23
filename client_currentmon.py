@@ -11,7 +11,7 @@ import argparse
 import matplotlib.pyplot as plt
 import zmq
 import time
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import base64
 from io import BytesIO
 from matplotlib.figure import Figure
@@ -20,8 +20,17 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    plot1, plot2 = plot_dcct()
+    plot1, plot2, area1, area2 = plot_dcct()
     return render_template('index2.html', plot2=plot2, plot1=plot1)
+
+@app.route('/dcct', methods=['POST'])
+def dcct():
+    global dcct
+    dcct = int(request.form['dcct'])
+    plot1, plot2, area1, area2 = plot_dcct()
+    
+    return render_template('index2.html', plot2=plot2, plot1=plot1, area1=area1, area2=area2)
+    
 
 def plot_dcct():
     df,fd = getzmqdf()
@@ -35,28 +44,30 @@ def plot_dcct():
     ax = fig.subplots()
     ax.plot(xx , 10*np.log10(ff), 'palevioletred')
   #  ax.set_title(str(time.strftime("%H:%M:%S"))+' dcct='+str(dcct1))
-    ax.set_title('Recorded on ' + str(time.ctime(dates))+' dcct='+str(dcct1))
+    ax.set_title('Recorded on ' + str(time.ctime(dates))+' dcct='+str(dcct))
     ax.set_xlabel('Frequency in [Hz]')
     ax.set_ylabel('Power in [dB]')
     buf = BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0) 
     figpng = base64.b64encode(buf.getvalue())
-        
+    area1 = np.trapz(ff,xx)/dcct    
+    
     dates2 = int(np.real(fd[1])) 
     fd=fd[2:]
     ff2 = abs(np.fft.fftshift(np.fft.fft(fd)))**2
     fig2 = Figure()
     ax2 = fig2.subplots()
     ax2.plot(xx, 10*np.log10(ff2), 'palevioletred')
-    ax2.set_title('Recorded on ' + str(time.ctime(dates2))+' dcct='+str(dcct1))
+    ax2.set_title('Recorded on ' + str(time.ctime(dates2))+' dcct='+str(dcct))
     ax2.set_ylabel('Power in [dB]')
     ax2.set_xlabel('Frequency in [Hz]')
     buf2 = BytesIO()
     fig2.savefig(buf2, format="png")
     buf2.seek(0) 
     figpng2 = base64.b64encode(buf2.getvalue())
-    return figpng.decode("utf-8"), figpng2.decode("utf-8")
+    area2 = np.trapz(ff2,xx)/dcct
+    return figpng.decode("utf-8"), figpng2.decode("utf-8"), area1, area2
 
 def getzmqdf():
     
@@ -88,7 +99,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     port = args.port
     host = args.host
-    dcct1= args.dcct
+    dcct = args.dcct
     app.run(debug=True, port=args.portCM, host=args.hostCM)
   
   

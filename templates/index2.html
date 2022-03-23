@@ -10,15 +10,17 @@
         <label > How often the page needs to be refresh in s:</label>
         <input type="text" id="refreshtime" name="refreshtime" style="width: 135px;"/>
       </form>    
-          <form action="/dcct" method="post"  class="center">
-              <label for="dcct1"> Enter the DCCT [mA] value:</label>
-              <input type="text" name="dcct1" >
-              <button type="submit" name="dcct" value="dcct1"> Apply </button>
+          <form action="{{ url_for('dcct') }}" method="POST"  class="center">
+              <label for="dcct"> Enter the DCCT [mA] value:</label>
+              <input type="text" name="dcct" >
+              <button type="submit" name="dcct" value="dcct"> Apply </button>
           </form> 
+          
       <main>
-
+     
         <section>
           <p> Channel RX1L </p>
+          <p> The area under the curve is {{ area1 }}</p>
           <figure>
             <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
             <figcaption> Changing of current graph </figcaption>
@@ -26,6 +28,7 @@
        </section>   
           <aside>
               <p> Channel RX2L </p>
+              <p> The area under the curve is {{ area2 }}</p>
               <figure>
                 <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
                 <figcaption> Changing of current graph </figcaption>
