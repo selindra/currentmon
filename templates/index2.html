@@ -1,62 +1,73 @@
 <html>
-<link rel="stylesheet" href="{{ url_for('static', filename='currentmon2.css') }}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='currentmon2.css') }}">
+<body>
 
-  <body>
-
-      <header>
+  <header>
     <img src="https://i.ibb.co/9wjhcTC/logocm.png" alt="logo" class="center">
-      </header>
-      <form   class="center">
-        <label > Page refresh rate [s]:</label>
-        <input type="text" id="refreshtime" name="refreshtime" style="width: 135px;"/>
-      </form>    
-          <form method="POST" action="{{ url_for('dcct') }}"  class="center">
-              <label for="dcct"> DCCT max value for normlization [mA]:</label>
-              <input type="text" name="dcct" >
-              <button type="submit" name="dcct" value="dcct"> Apply </button>
-          </form> 
-          
-      <main>
-     
-        <section>
-          <p> Channel RX1L </p>
-          <p> Corresponding Schottky current [mA]: {{ current1 }}</p>
-          <figure>
-            <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
-            <figcaption> Changing of current graph </figcaption>
-          </figure>
-       </section>   
-          <aside>
-              <p> Channel RX2L </p>
-              <p> Corresponding Schottky current [mA]: {{ current2 }}</p>
-              <figure>
-                <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
-                <figcaption> Changing of current graph </figcaption>
-              </figure>
+  </header>
 
-          </aside>
-      </main>
+  <main>
+    <section>
+      <p> Channel RX1L </p>
+      <p> Corresponding Schottky current [mA]: {{ current1 }}</p>
 
-    <footer>
-      <p><a href="https://github.com/selindra" target="_blank"></a></p>
-    </footer> 
-  <script  type="text/javascript">
-let refreshtime = document.getElementById("refreshtime");
-if (sessionStorage.getItem("autosave")) {
-  refreshtime.value = sessionStorage.getItem("autosave");
-  setTimeout(function () {
-    location.reload(1);
-  }, refreshtime.value * 1000);
-} else {
-  setTimeout(function () {
-    location.reload(1);
-  }, 5000);
-}
-if(refreshtime){
-  refreshtime.addEventListener("change", function () {
-    sessionStorage.setItem("autosave", refreshtime.value);
-  });
-}
-</script>
-  </body>
+      <figure>
+        <img src="data:image/png;base64,{{ plot1 }}" width="500" alt="my plot">
+        <figcaption> Changing of current graph </figcaption>
+      </figure>
+
+    </section>
+    <aside>
+      <p> Channel RX2L </p>
+      <p> Corresponding Schottky current [mA]: {{ current2 }}</p>
+
+      <figure>
+        <img src="data:image/png;base64,{{ plot2 }}" width="500" alt="my plot 2">
+        <figcaption> Changing of current graph </figcaption>
+      </figure>
+
+    </aside>
+  </main>
+
+  <form class="center">
+    <label> Page refresh rate [s]:</label>
+    <input type="text" id="refreshtime" name="refreshtime" style="width: 135px;" />
+  </form>
+
+  <form method="POST" action="{{ url_for('dcct') }}" class="center">
+    <label for="dcct"> DCCT max value for normlization [mA]:</label>
+    <input type="text" name="dcct">
+    <button type="submit" name="dcct" value="dcct"> Apply </button>
+  </form>
+
+  <font face="cursive,serif" color="Palevioletred" size="5">
+    {% if error %}
+    <p><strong>Error: {{error}}</strong></p>
+    {% endif %}
+  </font>
+
+  <footer>
+    <p><a href="https://github.com/selindra" target="_blank"></a></p>
+  </footer>
+
+  <script type="text/javascript">
+    let refreshtime = document.getElementById("refreshtime");
+    if (sessionStorage.getItem("autosave")) {
+      refreshtime.value = sessionStorage.getItem("autosave");
+      setTimeout(function() {
+        location.reload(1);
+      }, refreshtime.value * 1000);
+    } else {
+      setTimeout(function() {
+        location.reload(1);
+      }, 5000);
+    }
+    if (refreshtime) {
+      refreshtime.addEventListener("change", function() {
+        sessionStorage.setItem("autosave", refreshtime.value);
+      });
+    }
+  </script>
+
+</body>
 </html>

@@ -18,41 +18,54 @@ from io import BytesIO
 from matplotlib.figure import Figure
 
 
+
+SECRET_KEY = 'ups'    
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 @app.route('/')
 def index():
-    # if request.method == 'POST':
-    #     global dcct
-    #     dcct = int(request.form['dcct'])
-    #     plot1, plot2, area1, area2 = plot_dcct()
-    #     global a1 
-    #     a1 = dcct/area1
-    #     global a2
-    #     a2 = dcct/area2
-    #    # current1 = a1 * area1 
-    # #    current2 = a2 * area2
-    #     return render_template('index2.html', plot2=plot2, plot1=plot1, )
-    # else:
-        plot1, plot2, area1, area2 = plot_dcct()
-        current1 = a1 * area1 
-        current2 = a2 * area2
-        return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
+    plot1, plot2, area1, area2 = plot_dcct()
+    current1 = a1 * area1 
+    current2 = a2 * area2
+    return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)#, form=form)
 
-@app.route('/dcct', methods=['POST'])
+@app.route('/dcct', methods=('GET', 'POST'))
 def dcct():
-        global dcct
-        dcct = float(request.form['dcct'])
+    global dcct
+    global a1 
+    global a2
+    if isnum(request.form['dcct'])==True:
+        if ',' in request.form['dcct']:
+            dcct =  float(request.form['dcct'].replace(',', '.'))
+            plot1, plot2, area1, area2 = plot_dcct()
+            a1 = dcct/area1
+            a2 = dcct/area2
+            current1 = a1 * area1 
+            current2 = a2 * area2
+            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))#, form=form))
+        else:    
+            dcct = float(request.form['dcct'])
+            plot1, plot2, area1, area2 = plot_dcct()
+            a1 = dcct/area1
+            a2 = dcct/area2
+            current1 = a1 * area1 
+            current2 = a2 * area2
+            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))#, form=form))
+    else:
         plot1, plot2, area1, area2 = plot_dcct()
-        global a1 
-        a1 = dcct/area1
-        global a2
-        a2 = dcct/area2
         current1 = a1 * area1 
         current2 = a2 * area2
-        # return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
-        return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))
-    
+        return render_template('index2.html', error='Value must be numerical!', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
+
+
+def isnum(value):
+        if value.isdigit():
+            return True
+        elif value.replace('.','').isdigit() or value.replace(',','').isdigit():
+            return True
+        else:
+            return False
 
 def plot_dcct():
     df,fd = getzmqdf()
@@ -105,14 +118,13 @@ def getzmqdf():
 def saveplot(ff, xx, dates):
     path = ''
     plt.plot(xx, ff, 'palevioletred')
-   #plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
+   # plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
     plt.xlabel('Frequency in [Hz]', fontsize='small')
     plt.ylabel('Power in [dB]')        
     plt.savefig(path + 'plot{}.png'.format(str(time.ctime(dates))+' DCCTmax='+str(dcct)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    #parser.add_argument("--dcct", type=float, nargs='?', help="Give the DCCT current value")
     parser.add_argument("--host", type=str, nargs='?', help="Set publisher host")
     parser.add_argument("--port", type=str, nargs='?', help="Set publisher port")
     parser.add_argument("--hostCM", type=str, nargs='?', help="Set publisher host")
@@ -120,7 +132,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     port = args.port
     host = args.host
-    #dcct = args.dcct
     a1, a2, dcct = 50, 50, 0.01
     app.run(debug=True, port=args.portCM, host=args.hostCM)
   
