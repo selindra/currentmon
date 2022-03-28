@@ -26,9 +26,9 @@ app.config['SECRET_KEY'] = SECRET_KEY
 @app.route('/')
 def index():
     plot1, plot2, area1, area2 = plot_dcct()
-    current1 = a1 * area1 
+    current1 = a1 * area1
     current2 = a2 * area2
-    return render_template('index2.html', plot2=plot2, plot1=plot1, current1=current1, current2=current2)#, form=form)
+    return render_template('index2.html', plot2=plot2, plot1=plot1, current1=format(current1, '.3f'), current2=format(current2, '.3f'))
 
 @app.route('/dcct', methods=('GET', 'POST'))
 def dcct():
@@ -41,22 +41,22 @@ def dcct():
             plot1, plot2, area1, area2 = plot_dcct()
             a1 = dcct/area1
             a2 = dcct/area2
-            current1 = a1 * area1 
+            current1 = a1 * area1
             current2 = a2 * area2
-            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))#, form=form))
+            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=format(current1, '.3f'), current2=format(current2, '.3f')))
         else:    
             dcct = float(request.form['dcct'])
             plot1, plot2, area1, area2 = plot_dcct()
             a1 = dcct/area1
             a2 = dcct/area2
-            current1 = a1 * area1 
+            current1 = a1 * area1
             current2 = a2 * area2
-            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=current1, current2=current2))#, form=form))
+            return redirect(url_for('index', plot2=plot2, plot1=plot1, current1=format(current1, '.3f'), current2=format(current2, '.3f')))
     else:
         plot1, plot2, area1, area2 = plot_dcct()
         current1 = a1 * area1 
         current2 = a2 * area2
-        return render_template('index2.html', error='Value must be numerical!', plot2=plot2, plot1=plot1, current1=current1, current2=current2)
+        return render_template('index2.html', error='Value must be numerical!', plot2=plot2, plot1=plot1, current1=format(current1, '.3f'), current2 = format(current2, '.3f'))
 
 
 def isnum(value):
@@ -80,7 +80,7 @@ def plot_dcct():
     ax.plot(xx , 10*np.log10(ff), 'palevioletred')
     ax.set_title(str(datetime.datetime.strptime(time.ctime(dates), "%a %b %d %H:%M:%S %Y"))+', DCCTnorm='+str(dcct))
     ax.set_xlabel('Frequency in [Hz]')
-    ax.set_ylabel('Power in [dB]')
+    ax.set_ylabel('Power in [dB] a.u.')
     ax.grid()
     buf = BytesIO()
     fig.savefig(buf, format="png")
@@ -95,7 +95,7 @@ def plot_dcct():
     ax2 = fig2.subplots()
     ax2.plot(xx, 10*np.log10(ff2), 'palevioletred')
     ax2.set_title(str(datetime.datetime.strptime(time.ctime(dates2), "%a %b %d %H:%M:%S %Y"))+', DCCTnorm='+str(dcct))
-    ax2.set_ylabel('Power in [dB]')
+    ax2.set_ylabel('Power in [dB] a.u.')
     ax2.set_xlabel('Frequency in [Hz]')
     ax2.grid()
     buf2 = BytesIO()
@@ -122,7 +122,7 @@ def saveplot(ff, xx, dates):
     plt.plot(xx, ff, 'palevioletred')
    # plt.fill_betweenx(ff, xx[1], xx[-1], color='red')
     plt.xlabel('Frequency in [Hz]', fontsize='small')
-    plt.ylabel('Power in [dB]')        
+    plt.ylabel('Power in [dB] a.u.')        
     plt.savefig(path + 'plot{}.png'.format(str(time.ctime(dates))+' DCCTmax='+str(dcct)))
 
 if __name__ == "__main__":

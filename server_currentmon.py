@@ -17,7 +17,7 @@ def con(host, port, center, span):
     socket = context.socket(zmq.PUB)
     socket.bind('tcp://'+host+':'+port)
     socket.setsockopt(zmq.CONFLATE, 1)
-    mylime = LimeReader(cent_freq = center, meas_time = 1, fs = span, rx_bw = span/2, channel = [1, 2]) #span*2==fs???? and bw how related to span
+    mylime = LimeReader(cent_freq = center, meas_time = 1, fs = span, rx_bw = span/2, channel = [1, 2])
    
     try:
         while True:
